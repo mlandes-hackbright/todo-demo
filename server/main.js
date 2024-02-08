@@ -12,6 +12,7 @@ app.use(cors());
 // define routes
 app.get('/todos', controller.getAllTodos);
 app.post('/todos', controller.addTodoItem);
+app.put('/todos/:id', controller.setTodoItemState);
 
 const { PORT } = process.env;
 app.listen(PORT, () => console.log(`server running on ${PORT}`));

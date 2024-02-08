@@ -5,6 +5,25 @@ const newTaskForm = document.querySelector('#new-task-form');
 const newItemTextField = document.querySelector('#new-item-text-field');
 const newItemDueDateField = document.querySelector('#new-item-due-date-field');
 
+function handleCheckToggle(item, li) {
+    // send request to update the data
+    const payload = {
+        "completed": !item.completed
+    };
+    axios.put(`${BASE_URL}/todos/${item.id}`, payload)
+        .then(result => {
+            // on success, make sure the front-end is in sync
+            item.completed = result.data.completed;
+            if (item.completed) {
+                li.querySelector('label').innerHTML = `<s>${item.task} | ${item.due} </s>`;
+            } else {
+                li.querySelector('label').innerHTML = `${item.task} | ${item.due}`;
+            }
+        }).catch(err => {
+            // on error, should also revert change on front-end (undo checkbox checked)
+        });
+}
+
 // load those objects into the DOM
 function insertTodoItemIntoList(item) {
     const li = document.createElement('li');
@@ -26,6 +45,12 @@ function insertTodoItemIntoList(item) {
             </label>
         </div>`;
     }
+
+    // add this so that when we click on a checkbox, we update the item
+    // not only here, but also on the server / db
+    li.querySelector('input').addEventListener('click', () => {
+        handleCheckToggle(item, li);
+    });
 
     todoList.appendChild(li);
 }
