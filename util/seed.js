@@ -10,13 +10,15 @@ const SQL_CODE = `DROP TABLE IF EXISTS todos;
 
 CREATE TABLE todos (
 	id SERIAL PRIMARY KEY,
-	task TEXT
+	task TEXT NOT NULL,
+	completed BOOLEAN NOT NULL,
+	due DATE NOT NULL
 );
 
-INSERT INTO todos (task)
-VALUES ('clean room'),
-	('cook dinner'),
-	('take friend to movie');`;
+INSERT INTO todos (task, completed, due)
+VALUES ('clean room', true, '2024-02-06'),
+	('cook dinner', false, '2024-02-07'),
+	('take friend to movie', false, '2024-02-08');`;
 
 sql.query(SQL_CODE).then(sqlResult => {
     console.log('successfully seeded the database');

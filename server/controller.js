@@ -8,7 +8,7 @@ const sql = new sequelize.Sequelize(CONNECTION_STRING);
 
 module.exports = {
     getAllTodos: (req, res) => {
-        sql.query('SELECT * FROM todos;').then(sqlResult => {
+        sql.query('SELECT * FROM todos ORDER BY due;').then(sqlResult => {
             const data = sqlResult[0];
             res.status(200).send(data);
         }).catch(err => {
@@ -16,18 +16,13 @@ module.exports = {
         });
     },
 
-    addTodoItem: (req, res) => {
-        // extract the actual task from the request itself
-        // const task = "practice piano";
-
-        // req.body = {
-        //     "task": "practice piano"
-        // }
-
-        const task = req.body.task;
+    addTodoItem: (req, res) => { // NOTE: need to update to account for 'completed' and 'due'
+        // const task = req.body.task;
+        // const due = req.body.due;
+        const { task, due } = req.body;
         
-        const SQL_CODE = `INSERT INTO todos (task)
-        VALUES ('${task}');`;
+        const SQL_CODE = `INSERT INTO todos (task, completed, due)
+        VALUES ('${task}', false, '${due}');`;
 
         sql.query(SQL_CODE).then(sqlResult => {
             res.status(200).end();
