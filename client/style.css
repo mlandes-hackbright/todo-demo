@@ -5,3 +5,8 @@
 #todo-list {
     list-style: none;
 }
+
+#new-task-form {
+    padding: 2em;
+    background-color: lightskyblue;
+}
